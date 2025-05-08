@@ -1,0 +1,9 @@
+openai
+SpeechRecognition
+PyAudio
+pyttsx3
+pygame
+pillow
+pycaw
+numpy
+sounddevice
