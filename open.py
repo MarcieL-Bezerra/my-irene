@@ -6,7 +6,7 @@ client = OpenAI(base_url="http://localhost:8080/v1", api_key="lm-studio")
 # Define uma função para obter a resposta da IA
 def get_ai_response(pergunta: str,type):
     # Define o contexto e o tom da conversa
-    system_message = {"role": "system", "content": f"Você é um {type}"}
+    system_message = {"role": "system", "content": f"Seu nome é Irene, Você é um {type}"}
     user_message = {"role": "user", "content": pergunta}
 
     response = client.chat.completions.create(

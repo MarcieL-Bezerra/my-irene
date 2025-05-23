@@ -10,7 +10,7 @@ def active_actions():
         heard = speech.reconhece_voz()
         saindo = "sair"
         mywebbrowser = "navegador"
-        type = "robo, seu nome é Irene, responde tudo em no máximo com 20 palavras."
+        type = "robo, responde tudo em no máximo com 20 palavras."
         criandoSistema = ["crie um código python", "crie um sistema em python", "em python", "com python", "o python"]
         if heard != None and saindo.lower() in heard.lower():
             response = "Certo, até logo."
