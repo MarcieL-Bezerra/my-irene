@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>irene</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <style>
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h1>Irene</h1>
+        <div id="chat-log"></div>
+        <textarea id="chat-input" placeholder="Digite sua pergunta..."></textarea>
+        <button type="button" id="enviar-pergunta">Enviar</button>
+        <div class="progress-bar" id="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>
+        const chatInput = document.getElementById('chat-input');
+        const chatLog = document.getElementById('chat-log');
+        const enviarPerguntaButton = document.getElementById('enviar-pergunta');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        let isSending = false;
+
+        async function enviarPergunta() {
+            if (isSending) return;
+            const pergunta = chatInput.value.trim();
+            if (pergunta === '') {
+                alert('Por favor, digite uma pergunta');
+                return;
+            }
+            isSending = true;
+            enviarPerguntaButton.disabled = true;
+            progressBar.style.display = 'block';
+            let width = 0;
+            const intervalId = setInterval(() => {
+                width += 5;
+                if (width > 100) width = 0;
+                progress.style.width = `${width}%`;
+            }, 50);
+            try {
+                const response = await fetch('/enviar_pergunta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ pergunta: pergunta })
+                });
+                const data = await response.json();
+                chatLog.innerHTML += `<p>Você: ${pergunta}</p><pre><code>${data.resposta}</code></pre>`;
+                hljs.highlightAll();
+                chatInput.value = '';
+            } catch (error) {
+                console.error(error);
+                chatLog.innerHTML += `<p>Erro ao enviar pergunta: ${error.message}</p>`;
+            } finally {
+                clearInterval(intervalId);
+                isSending = false;
+                enviarPerguntaButton.disabled = false;
+                progressBar.style.display = 'none';
+                progress.style.width = '0%';
+            }
+        }
+
+        enviarPerguntaButton.addEventListener('click', enviarPergunta);
+
+        chatInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                enviarPergunta();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -10,6 +10,7 @@ def active_actions():
         heard = speech.reconhece_voz()
         saindo = "sair"
         mywebbrowser = "navegador"
+        type = "robo, seu nome é Irene, responde tudo em no máximo com 20 palavras."
         criandoSistema = ["crie um código python", "crie um sistema em python", "em python", "com python", "o python"]
         if heard != None and saindo.lower() in heard.lower():
             response = "Certo, até logo."
@@ -18,7 +19,7 @@ def active_actions():
         elif heard != None and any(x.lower() in heard.lower() for x in criandoSistema):
             response = "Sim, claro."
             sound.texto_para_fala(response)
-            result = open.get_ai_response(heard)
+            result = open.get_ai_response(heard, type)
             print("criar pasta")
             create_sistem(result)
             response = "Por favor faça os ajustes necessários."
@@ -30,7 +31,7 @@ def active_actions():
             open_browser()
             return True
         elif heard != None:
-            response = open.get_ai_response(heard)
+            response = open.get_ai_response(heard, type )
             sound.texto_para_fala(response)
             return True
     except speech.VozNaoReconhecida:
