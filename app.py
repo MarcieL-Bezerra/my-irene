@@ -11,11 +11,14 @@ def index():
 
 @app.route('/enviar_pergunta', methods=['POST'])
 def enviar_pergunta():
-    type = " assistente virtual inteligente capaz de fornecer informações precisas e úteis sobre uma ampla gama de tópicos."
-    data = request.get_json()
-    pergunta = data['pergunta']
-    response = open.get_ai_response(pergunta, type )
-    return jsonify({'resposta': response})
-
+    try:
+        type = " assistente virtual inteligente capaz de fornecer informações precisas e úteis sobre uma ampla gama de tópicos."
+        data = request.get_json()
+        pergunta = data['pergunta']
+        response = open.get_ai_response(pergunta, type )
+        return jsonify({'resposta': response})
+    except:
+        response = "Tente novamente mais tarde!"
+        return jsonify({'resposta': response})
 if __name__ == '__main__':
     app.run(debug=True)

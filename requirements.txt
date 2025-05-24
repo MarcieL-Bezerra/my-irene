@@ -8,3 +8,4 @@ pycaw
 numpy
 sounddevice
 flask
+requests
